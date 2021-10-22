@@ -51,4 +51,4 @@ Running a simulation and generating plots (il_backprop.py)
 To run a simulation, simply run il_backprop.py. Plots for the chosen dimensionality will automatically be produced at the end of simulation.
 
 **Preprocessing the Free Spoken Digits Dataset (FSDD) (il_fsdd_preprocessing)**
-For Figure 4 we generate spectrograms from the FSDD. Generating this plot will require our preprocessed data, run on the data from the [FSDD] (https://github.com/Jakobovski/free-spoken-digit-dataset). To preprocess the data, set your folder path to the location of your downloaded FSDD recordings folder, and set your output path to the location of your downloaded Impression Learning code. All that remains is to run the file (~5 min runtime).
+For Figure 4 we generate spectrograms from the FSDD. Generating this plot will require our preprocessed data, run on the data from the FSDD (https://github.com/Jakobovski/free-spoken-digit-dataset). To preprocess the data, set your folder path to the location of your downloaded FSDD recordings folder, and set your output path to the location of your downloaded Impression Learning code. All that remains is to run the file (~5 min runtime).
