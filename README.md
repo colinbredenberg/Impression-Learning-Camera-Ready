@@ -5,13 +5,21 @@ Camera ready code repo for the NeuRIPS 2021 paper: "Impression learning: Online 
 # Requirements
 
 -numpy
+
 -time
+
 -os
+
 -copy
+
 -deepcopy
+
 -re
+
 -matplotlib.pyplot
+
 -pickle
+
 -scipy
 
 For the Free Spoken Digits Dataset simulations:
