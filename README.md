@@ -35,10 +35,14 @@ in ~5-10 minutes on a personal computer.
 
 **Experimental Parameters (il_exp_params.py)**
 This file specifies the particular type of simulation to run, and selects simulation hyperparameters accordingly.
-To generate Figure 1 (~5 min runtime): set mode = 'standard'
-To generate Figure 2: set mode = 'SNR' (Fig. 2a-c) or set mode = 'dimensionality' (Fig. 2d). This will require the cluster.
-To generate Figure 3: set mode = 'switch_period'. This will require the cluster
-To generate Figure 4 (~8 min runtime): set mode = 'Vocal_Digits'. Running this simulation will require librosa, as well as our preprocessed dataset (See Preprocessing FSDD).
+
+To generate Figure 1 (~5 min runtime): set mode = 'standard'. This can be run on a local computer.
+
+To generate Figure 2: set mode = 'SNR' (Fig. 2a-c) or set mode = 'dimensionality' (Fig. 2d). This will require a cluster.
+
+To generate Figure 3: set mode = 'switch_period'. This will require a cluster.
+
+To generate Figure 4 (~8 min runtime): set mode = 'Vocal_Digits'. This can be run on a local computer. Running this simulation will require librosa, as well as our preprocessed dataset (See Preprocessing FSDD).
 
 To save data after a simulation, set save = True
 
