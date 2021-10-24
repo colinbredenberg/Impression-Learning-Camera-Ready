@@ -56,10 +56,11 @@ To save the results of a simulation, set image_save = True, which will save imag
 
 **Backpropagation controls:**
 We used Pytorch to separately train our backpropagation control, which has its own experimental parameters.
-Experimental Parameters (il_exp_params_bp.py)
-array_num determines the dimensionality of the latent space.
 
-Running a simulation and generating plots (il_backprop.py)
+Experimental Parameters (il_exp_params_bp.py): array_num determines the dimensionality of the latent space.
+
+Running a simulation and generating plots (il_backprop.py):
+
 To run a simulation, simply run il_backprop.py. Plots for the chosen dimensionality will automatically be produced at the end of simulation.
 
 **Preprocessing the Free Spoken Digits Dataset (FSDD) (il_fsdd_preprocessing.py)**
