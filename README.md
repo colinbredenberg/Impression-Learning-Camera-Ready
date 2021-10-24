@@ -50,7 +50,7 @@ To save data after a simulation, set save = True
 To run a simulation, simply run impression_learning.py after setting experimental parameters appropriately.
 
 **Plotting (il_plot_generator.py)**
-To plot data after a simulation, simply run il_plot_generator.py. We ran these files consecutively in an IDE (e.g. Spyder)
+To plot data after a simulation, simply run il_plot_generator.py. We ran these files consecutively in an IDE (e.g. Spyder).
 To save the results of a simulation, set image_save = True, which will save images in your local directory.
 
 
