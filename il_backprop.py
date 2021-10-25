@@ -8,6 +8,7 @@ import os
 import pickle
 if exp_params.local:
     import matplotlib.pyplot as plt
+    
 class HelmHoltzCell(nn.Module):
     def __init__(self, n_latent, n_in, nonlinearity):
         """ Requirements
@@ -90,7 +91,6 @@ class HelmHoltzCell(nn.Module):
         self.latent_gen = self.latent_mean_gen + latent_noise_gen
 
         # sleep phase updates
-        #self.latent_gen = torch.normal(mean=0., std=self.sigma_latent_gen.item(), size=(self.n_latent,))
         h_gen = torch.matmul(self.W_out, self.latent_gen)
         self.s_mean_gen = self.nl.f(h_gen)
         obs_noise_gen = torch.normal(mean=0., std=self.sigma_obs_gen.item(), size=(self.n_in,))
@@ -152,9 +152,6 @@ class HelmholtzModel(nn.Module):
         # during sleep
         Lq = la.norm(self.cell.latent -
                      self.nl.f(torch.matmul(self.cell.W_in, self.cell.s)))**2 / self.cell.sigma_latent_inf**2 #-\
-             #la.norm(self.cell.latent - self.cell.latent_mean_gen)**2/self.cell.sigma_latent_gen**2 + \
-             #la.norm(self.cell.s - self.cell.s_mean_inf)**2/self.cell.sigma_obs_inf**2 - \
-             #la.norm(self.cell.s - self.cell.s_mean_gen)**2/self.cell.sigma_obs_gen**2
 
         if self.cell.phase == "wake":
             self.cell.W_in.requires_grad = True
@@ -201,17 +198,10 @@ class HelmholtzModel(nn.Module):
                 optimizer.zero_grad()  # reset the gradients
                 self.calculate_loss()
                 self.loss.backward()
-# =============================================================================
-#                 if (np.mod(tt, bptt_period) == 0):
-#                     self.loss.backward()  # propagate gradients backwards
-#                     prev_latent = self.cell.latent.detach()
-#                 else:
-#                     self.loss.backward(retain_graph = True)
-# =============================================================================
+
                 optimizer.step()
 
             elif not train:
-                #self.cell.set_phase('wake')  # keep the network in the wake phase unless being trained
                 self.calculate_loss()
             
             if phase_switch:
@@ -235,12 +225,6 @@ class HelmholtzModel(nn.Module):
 
         print('D_r', self.cell.D_r.detach())
         transition_mat = torch.diag(self.cell.D_r.detach())
-# =============================================================================
-#         plt.title('Transition matrix')
-#         plt.imshow(transition_mat)
-#         plt.colorbar()
-#         plt.show()
-# =============================================================================
 
         return latents, losses
 
@@ -355,16 +339,14 @@ if __name__ == '__main__':
     n_out = exp_params.n_out
     n_in = exp_params.n_in
     n_neurons = exp_params.n_neurons # number of latent dimensions for neurons
-    n_sample = exp_params.n_sample  # 2000000  # number of data points for the train dataset
-    n_test = exp_params.n_test  # 30000  # number of data points for the test dataset
+    n_sample = exp_params.n_sample  # number of data points for the train dataset
+    n_test = exp_params.n_test  # number of data points for the test dataset
     dt = 0.1  # time step for the data OU process
     sigma_latent_data = 0.5 * np.sqrt(dt)
     mixing_matrix = torch.from_numpy(np.random.normal(scale=1/n_latent, size=(n_in, n_latent))).float()  # observation matrix
     transition_matrix = (1 - sigma_latent_data**2) * torch.eye(n_latent)
 
     # static datasets
-    # data_train = simulate_data(n_latent, n_out, n_sample, mixing_matrix, sigma_latent=1, sigma_out=0.01)
-    # data_test = simulate_data(n_latent, n_out, n_test, mixing_matrix, sigma_latent=1, sigma_out=0.01)
 
     # temporal datasets
     data_train, data_latent_train = simulate_temporal_data(
@@ -406,13 +388,11 @@ if __name__ == '__main__':
     latent_test_switch, loss_test_switch = network(data_test, train=False, phase_switch = True)
     #%%
     # reformat data for plotting
-    #(loss_wake, loss_sleep) = reformat_data(loss, n_sample, switch_period, train=True)
+
     loss_reformat = reformat_data(loss, 1000, switch_period, train = False)
     if exp_params.local and exp_params.local_plot:
         plt.figure()
-        #plt.plot(loss_sleep)
-        #plt.plot(loss_wake)
-        #plt.legend(('sleep phase', 'wake phase'))
+
         plt.plot(loss_reformat)
         plt.title('loss through training')
         plt.show()

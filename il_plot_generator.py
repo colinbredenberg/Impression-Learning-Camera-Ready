@@ -88,7 +88,6 @@ if exp_params.mode == 'standard':
         loss_array_mean = np.mean(loss_array, axis = 0)
         loss_array_sem = stats.sem(loss_array, axis = 0)
         plt.errorbar(range(0, len(loss_array)), loss_array_mean, yerr = loss_array_sem)
-        #plt.legend(('sleep phase', 'wake phase'))
         plt.title('loss through training')
     else:
         plt.plot(loss_mean)
@@ -136,7 +135,6 @@ if exp_params.mode == 'standard':
         io_fig.savefig(plot_save_folder+'io_plot.pdf', format = 'pdf')
         acf_fig.savefig(plot_save_folder+'acf_plot.pdf', format = 'pdf')
         io_trace_fig.savefig(plot_save_folder + 'io_trace.pdf', format = 'pdf')
-        #gen_acf_fig.savefig(plot_save_folder+'gen_acf_plot.pdf', format = 'pdf')
 
 #%% Plotting functions for the SNR mode
 if exp_params.mode == 'SNR':
@@ -146,10 +144,8 @@ if exp_params.mode == 'SNR':
     n_sim = 20
     array_len = len(mean_ws)
     similarity_ws_bp = np.zeros((n_sim, array_len))
-    #cosine_similarity_ws_bp = np.zeros((array_len,))
     cosine_similarity_ws_r = np.zeros((n_sim, array_len))
     similarity_ws_r = np.zeros((n_sim, array_len))
-    #similarity_bp_r = np.zeros((array_len,))
     gradient_norm_ws = np.zeros((n_sim, array_len))
     gradient_norm_reinforce = np.zeros((n_sim, array_len))
     mean_snr_ws = np.zeros((n_sim, array_len))
@@ -163,10 +159,7 @@ if exp_params.mode == 'SNR':
         
 
         for ii in range(0, array_len):
-            #similarity_ws_bp[ii] = unnormalized_similarity(mean_ws[ii,:,:], mean_backprop_array[ii,:,:])
             similarity_ws_r[jj-1, ii] = unnormalized_similarity(mean_ws[ii][1][0], mean_reinforce[ii][1][0])
-            #similarity_bp_r[ii] = unnormalized_similarity(mean_backprop_array[ii,:,:], mean_reinforce_array[ii,:,:])
-            #cosine_similarity_ws_bp[ii] = cosine_similarity(mean_ws_array[ii,:,:], mean_backprop_array[ii,:,:])
             cosine_similarity_ws_r[jj-1, ii] = cosine_similarity(mean_ws[ii][1][0], mean_reinforce[ii][1][0])
             gradient_norm_ws[jj-1, ii] = np.linalg.norm(mean_ws[ii][1][0])
             gradient_norm_reinforce[jj-1,ii] = np.linalg.norm(mean_reinforce[ii][1][0])
@@ -184,7 +177,6 @@ if exp_params.mode == 'SNR':
     
     
     cosine_similarity_ws_bp_fig_snr, ax = plt.subplots(figsize = fig_dim)
-    #plt.plot(cosine_similarity_ws_bp)
     plt.errorbar(range(0, len(loss_mean)), np.mean(cosine_similarity_ws_r, axis = 0), yerr = stats.sem(cosine_similarity_ws_r, axis = 0))
     plt.ylim([0,1])
     plt.title('cosine similarity wake_sleep vs. backprop')
@@ -198,14 +190,12 @@ if exp_params.mode == 'SNR':
     snr_fig = plt.figure(figsize = fig_dim)
     plt.errorbar(range(0, len(loss_mean)), np.mean(mean_snr_ws, axis = 0), yerr = stats.sem(mean_snr_ws, axis = 0))
     plt.errorbar(range(0, len(loss_mean)), np.mean(mean_snr_r, axis = 0), yerr = stats.sem(mean_snr_r, axis = 0))
-    #plt.plot(mean_snr_bp)
     plt.yscale('log')
     plt.legend(('ws','r','bp'))
     plt.title('snr through learning')
     if image_save:
         loss_fig_snr.savefig(plot_save_folder+'loss_snr.pdf', format = 'pdf')
         norm_ws_bp_snr.savefig(plot_save_folder+'norm_ws_bp_snr.pdf', format = 'pdf')
-        #similarity_ws_bp_fig_snr.savefig(plot_save_folder + 'similarity_fig_snr.pdf', format = 'pdf')
         cosine_similarity_ws_bp_fig_snr.savefig(plot_save_folder + 'cosine_similarity_fig_snr.pdf', format = 'pdf')
         snr_fig.savefig(plot_save_folder+'snr_fig.pdf', format = 'pdf')
 
@@ -331,12 +321,9 @@ if exp_params.mode == 'dimensionality':
     plt.plot(loss_mean_total[5:10,:].T)
     
     dimensionality_fig = plt.figure(figsize = fig_dim)
-    #plt.scatter(2* 2**np.arange(1,6), loss_mean_total[0:5,19])
     plt.scatter(2* 2**np.arange(1,6), loss_mean_imp)
-    #plt.scatter(2 * 2**np.arange(1,6), loss_mean_total[5:10,19])
     plt.scatter(2 * 2**np.arange(1,6), loss_mean_r)
     plt.scatter(2 * 2**np.arange(1,6), loss_mean_bp)
-    #plt.scatter(np.arange(10,110, 10), loss_mean_total[10:20,0])
     plt.legend(('impression', 'reinforce', 'bp'))#, 'initial loss'))
     plt.xlabel('latent/neural dimension')
     plt.ylabel('asymptotic loss')
@@ -443,13 +430,11 @@ if exp_params.mode == 'Vocal_Digits':
     tickrange = range(0,85,20)
     ax.set_yticks(range(0,85,20))
     ax.set_yticklabels(frequencies_rd[tickrange])
-    #vocal_gen_fig.colorbar(img, ax = ax, format = "%+2.f dB")
     vocal_gen_fig.colorbar(img, format='%+2.0f dB')
     #%%
     vocal_acf_fig, ax = plt.subplots(figsize = fig_dim)
     sm.graphics.tsa.plot_acf(wake_sequence.latent[5,:], ax = ax, lags=40, use_vlines = False)
     sm.graphics.tsa.plot_acf(gen_sim.latent[5,:], ax = ax, lags = 40, use_vlines = False)
-    #sm.graphics.tsa.plot_acf(wake_sleep_sequence.latent[5,:], ax = ax, lags = 40)
     plt.legend(('wake', 'sleep'))
     plt.xlabel('time lag')
     plt.ylabel('autocorrelation')

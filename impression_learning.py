@@ -56,14 +56,11 @@ def Vocal_Digits(n_sample, n_digits = 10, hpc = False, test = False):
 
 def set_learn_alg(network, learning_rate, switch_period):
     if exp_params.algorithm == 'wake_sleep':
-        #learn_alg = WakeSleep(network, learning_rate, switch_period)
         learn_alg = LayeredImpression(network, learning_rate, switch_period)
     elif exp_params.algorithm == 'backprop':
         learn_alg = Backpropagation(network, learning_rate)
     elif exp_params.algorithm == 'reinforce':
-        #learn_alg = LayeredREINFORCE(network, learning_rate)
         learn_alg = LayeredAlternatingREINFORCE(network, learning_rate, switch_period, decay = 0.9)
-        #learn_alg = REINFORCE(network, learning_rate)
     return learn_alg
 
 class Function:
@@ -341,7 +338,6 @@ class FeedforwardLayer(Layer):
             
         self.h_pred_rec = self.nl.f(self.W_in @ self.child.h_gen + self.bias)
             
-        #self.layer_loss = np.sum((self.h - self.h_pred)**2)/self.sigma_gen**2
         self.layer_loss = self.delta *(np.sum((self.h - self.h_pred_gen)**2)/(self.sigma_gen**2) - np.sum((self.h - self.h_mean_rec))/(self.sigma_rec**2)) + (1-self.delta)* (np.sum((self.h - self.h_pred_rec)**2)/(self.sigma_rec**2) - np.sum((self.h - self.h_mean_gen)**2)/(self.sigma_gen**2))
         
     def reset(self):
@@ -622,7 +618,6 @@ class LayeredREINFORCE(LayeredLearningAlgorithm):
         self.loss_decay = loss_decay
         
     def update_learning_vars(self, record_stats = False):
-        #self.loss_avg = (self.loss_decay) * self.loss_avg + (1-self.loss_decay) * self.nn.loss_total
         self.loss_avg = 0#self.loss_decay * self.loss_avg + (1-self.loss_decay)*self.nn.loss_total
         for ii in range(0, len(self.nn.layer_list)):
             self.e_trace_rec_update_prev[ii] = self.e_trace_rec_update_list[ii]
@@ -675,7 +670,6 @@ class LayeredAlternatingREINFORCE(LayeredLearningAlgorithm):
             self.loss_avg = 0
             
     def update_learning_vars(self, record_stats = False):
-        #self.loss_avg = (self.loss_decay) * self.loss_avg + (1-self.loss_decay) * self.nn.loss_total
         self.loss_avg = self.loss_decay * self.loss_avg + (1-self.loss_decay)*self.nn.loss_total
         
         #First, compute the updates given by impression learning
@@ -726,7 +720,7 @@ class Simulation():
         T = self.data.shape[1] #total time
         if isinstance(self.nn, TwoLayeredHM):
             latent = np.zeros((self.nn.l1.N + self.nn.l2.N, T))
-        elif isinstance(self.nn, LayeredHM):# or isinstance(self.nn, TwoLayeredHM):
+        elif isinstance(self.nn, LayeredHM):
             latent = np.zeros((self.nn.l1.N, T))
 
         loss = np.zeros((1,T))
@@ -739,7 +733,6 @@ class Simulation():
         self.nn.set_phase(self.starting_phase)
         for ee in range(0, self.epoch_num): #loop through data as many times as dictated by the # of epochs.
             self.nn.reset() #remove stored previous states from the network
-            #self.nn.set_phase(self.starting_phase) #set the network to its initial phase
             if not(self.learn_alg is None):
                 self.learn_alg.reset_learning()
             for alg in self.compare_algs:
@@ -819,10 +812,8 @@ if __name__ == '__main__':
     else:
         sigma_latent_gen = sigma_latent_data
     
-    #network = HelmholtzMachine(n_neurons, n_in, W_in, sigma_latent, W_out, transition_mat, sigma_obs_gen, sigma_latent_gen, nonlinearity)
     if exp_params.mode in ('standard', 'MNIST', 'time_constant', 'switch_period', 'dimensionality', 'lr_optim', 'SNR', 'sinusoid'):
         network = LayeredHM([n_in, n_neurons], [sigma_obs_gen, sigma_latent_gen], [exp_params.sigma_in, sigma_latent])
-        #network = RandomLayeredHM([n_in, n_neurons], [sigma_obs_gen, sigma_latent_gen], [0, sigma_latent])
     elif exp_params.mode == ('Vocal_Digits'):
         network = TwoLayeredHM([n_in, n_neurons, 40], [sigma_obs_gen, sigma_obs_gen, sigma_latent_gen], [exp_params.sigma_in, sigma_latent, sigma_latent])
     #build the learning algorithm
