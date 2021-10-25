@@ -1,5 +1,5 @@
 # Impression-Learning-Camera-Ready
-Camera ready code repo for the NeuRIPS 2021 paper: "Impression learning: Online representation learning with synaptic plasticity".
+Camera ready code repo for the NeuRIPS 2021 paper: "Impression learning: Online representation learning with synaptic plasticity," by Colin Bredenberg, Benjamin S. H. Lyo, Eero P. Simoncelli, and Cristina Savin.
 
 
 # Requirements
